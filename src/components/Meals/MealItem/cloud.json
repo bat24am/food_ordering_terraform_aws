@@ -1,0 +1,28 @@
+{
+    "m1": {
+      "description": "Basmati rice and veggies",
+      "name": "Vegetable Rice & Curry",
+      "price": 400
+    },
+    "m2": {
+      "description": "Basmati rice and fish",
+      "name": "Rice & Curry with Fish",
+      "price": 450
+    },
+    "m3": {
+      "description": "Basmati rice and roast chicken",
+      "name": "Rice & Curry with Chicken",
+      "price": 450
+    },
+    "m4": {
+      "description": "Black pepper... and ginger...",
+      "name": "Vegetable Kothu",
+      "price": 350
+    },
+    "m5": {
+      "description": "Black pepper,ginger and rostchicken.",
+      "name": "Chicken Kothu ",
+      "price": 450
+    }
+  }
+  

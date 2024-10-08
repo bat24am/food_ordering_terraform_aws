@@ -1,0 +1,54 @@
+name: "Terraform action"
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: 
+      - main
+  pull_request:
+    
+permissions:
+      id-token: write # This is required for aws oidc connection
+      contents: read # This is required for actions/checkout
+      pull-requests: write # This is required for gh bot to comment PR
+env:
+  TF_LOG: INFO
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+jobs:
+  provision-ec2-and-s3:
+    name: Provision EC2 Instance and S3 Bucket
+    runs-on: ubuntu-latest
+    environment: Test
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.6.6  # Specify your desired Terraform version
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: GitHubWorkFlows
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: Terraform Init
+        run: terraform init 
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color  # Get the plan output for further steps
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        if: github.ref == 'refs/heads/main'  # Ensure apply only runs on main branch
+     
+      - name: Output Plan Status
+        run: echo "Terraform apply completed successfully!"
